@@ -6,7 +6,7 @@ import yt_dlp
 
 app = FastAPI()
 
-# This lets your frontend communicate securely with this server script
+# This lets your frontend communicate securely with this server script across the internet
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -50,5 +50,7 @@ async def download_video(request: DownloadRequest):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000)
-
+    # This automatically reads Render's dynamic port system ($PORT) 
+    # or falls back to port 8000 if you run it locally on your computer
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
